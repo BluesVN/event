@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Event自定义事件</title>
+</head>
+
+<body>
+    <div id="ev">
+        <style>
+            #ev {
+                width: 300px;
+                height: 100px;
+                background: red;
+                color: #fff;
+                text-align: center;
+                line-height: 100px;
+            }
+        </style>
+        目标元素
+    </div>
+    <script>
+        var ev = document.getElementById('ev');
+        //true 捕获阶段触发
+        window.addEventListener('click', function (params) {
+            console.log('window');
+        }, true)
+        document.addEventListener('click', function (params) {
+            console.log('document');
+        }, true)
+        document.documentElement.addEventListener('click', function (params) {
+            console.log('html');
+        }, true)
+        document.body.addEventListener('click', function (params) {
+            console.log('body');
+        }, true)
+        ev.addEventListener('click', function (params) {
+            console.log('ev');
+        }, true)
+
+
+        //自定义事件
+        var eve = new Event('biubiubiu', { "bubbles": true, "cancelable": false, "composed": false });//是否冒泡 ,是否能被取消,是否会在影子DOM根节点之外触发侦听器。
+        ev.addEventListener('biubiubiu', function (params) {
+            console.log('gun', params);
+        })
+        setTimeout(() => {
+            ev.dispatchEvent(eve)
+        }, 2000);
+
+        //这里必须用detail
+        var eve2 = new CustomEvent('kaka', { "detail": { "青岛大虾": true } });
+        ev.addEventListener('kaka', function (params) {
+            console.log(params.detail);
+        })
+        setTimeout(() => {
+            ev.dispatchEvent(eve2)
+        }, 3000);
+    </script>
+</body>
+
+</html>
